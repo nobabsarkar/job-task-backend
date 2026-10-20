@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utils/AppError";
-import type { RegisterUser } from "./user.interface";
+import type { IRequestUser, RegisterUser } from "./user.interface";
 import httpStatus from "http-status";
 import config from "../../config";
 

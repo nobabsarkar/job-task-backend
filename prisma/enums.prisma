@@ -1,5 +1,9 @@
-
 enum Role {
-    SUPER_ADMIN
-    STUDENT
+  SUPER_ADMIN
+  STUDENT
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
 }

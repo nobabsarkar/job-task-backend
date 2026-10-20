@@ -6,3 +6,10 @@ export interface RegisterUser {
   password: string;
   role: Role;
 }
+
+export interface IRequestUser {
+  id: string;
+  email: string;
+  name: string;
+  role: Role;
+}

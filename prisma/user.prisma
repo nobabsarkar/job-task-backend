@@ -1,10 +1,12 @@
 model User {
-    id String @id @default(uuid())
-    name String 
-    email String @unique
-    password String
-      role               Role       @default(STUDENT)
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(STUDENT)
 
-      createdAt DateTime @default(now())
-      updatedAt DateTime @updatedAt
+  status UserStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
