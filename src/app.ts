@@ -5,6 +5,7 @@ import express, {
 } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { UserRoutes } from "./app/module/user/user.route";
 
 const app: Application = express();
 
@@ -23,5 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");
 });
+
+app.use("/api/v1/auth", UserRoutes);
 
 export default app;
