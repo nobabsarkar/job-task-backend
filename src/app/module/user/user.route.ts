@@ -1,10 +1,14 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
-import { auth } from "../../middleware/checkAuth";
-import { Role } from "../../../../generated/prisma/enums";
+import { validateRequest } from "../../middleware/validateRequest";
+import { UserValidation } from "./user.validation";
 
 const router = Router();
 
-router.post("/register", UserController.registerUser);
+router.post(
+  "/register",
+  validateRequest(UserValidation.UserRegistrationZodSchema),
+  UserController.registerUser,
+);
 
 export const UserRoutes = router;
