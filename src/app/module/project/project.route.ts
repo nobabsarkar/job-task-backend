@@ -14,4 +14,10 @@ router.post(
   ProjectController.createProject,
 );
 
+router.get(
+  "/own-project",
+  auth(Role.STUDENT),
+  ProjectController.studentSeeOwnProject,
+);
+
 export const ProjectRoutes = router;

@@ -4,7 +4,10 @@ import { ProjectService } from "./project.service";
 import httpStatus from "http-status";
 
 const createProject = catchAsync(async (req, res) => {
-  const result = await ProjectService.createProjectIntoDB(req.body);
+  const result = await ProjectService.createProjectIntoDB(
+    req.body,
+    req?.user?.id as string,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -14,6 +17,20 @@ const createProject = catchAsync(async (req, res) => {
   });
 });
 
+const studentSeeOwnProject = catchAsync(async (req, res) => {
+  const studentId = req?.user?.id;
+
+  const result = await ProjectService.studentSeeOwnProject(studentId as string);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: "Student retrieved own project successfully",
+    data: result,
+  });
+});
+
 export const ProjectController = {
   createProject,
+  studentSeeOwnProject,
 };
