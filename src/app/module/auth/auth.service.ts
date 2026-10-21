@@ -5,7 +5,7 @@ import type { ILoginPayload, IRequestUser } from "./auth.interface";
 import httpStatus from "http-status";
 import { jwtUtils } from "../../utils/jwt";
 import config from "../../config";
-import type { SignOptions } from "jsonwebtoken";
+import type { JwtPayload, SignOptions } from "jsonwebtoken";
 
 const loginUser = async (payload: ILoginPayload) => {
   const { password } = payload;
@@ -72,7 +72,54 @@ const getMe = async (user: IRequestUser) => {
   return isUserExists;
 };
 
+const refreshToken = async (token: string) => {
+  const verifiedRefreshToken = jwtUtils.verifyToken(
+    token,
+    config.jwt_refresh_secret as string,
+  );
+
+  if (!verifiedRefreshToken.success || !verifiedRefreshToken.data) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      config.node_env === "development"
+        ? verifiedRefreshToken.error
+        : "Invalid refresh token",
+    );
+  }
+
+  const data = verifiedRefreshToken?.data as JwtPayload;
+
+  const user = await prisma.user.findUnique({
+    where: { id: data?.id },
+  });
+
+  const jwtPayload = {
+    id: user?.id,
+    name: user?.name,
+    email: user?.email,
+    role: user?.role,
+  };
+
+  const accessToken = jwtUtils.createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as SignOptions,
+  );
+
+  const refreshToken = jwtUtils.createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as SignOptions,
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
 export const AuthService = {
   loginUser,
   getMe,
+  refreshToken,
 };

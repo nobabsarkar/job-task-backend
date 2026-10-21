@@ -1,4 +1,5 @@
 import config from "../../config";
+import { AppError } from "../../utils/AppError";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { AuthService } from "./auth.service";
@@ -51,7 +52,42 @@ const getMe = catchAsync(async (req, res) => {
   });
 });
 
+const refreshToken = catchAsync(async (req, res) => {
+  if (!req.cookies.refreshToken) {
+    throw new AppError(httpStatus.NOT_FOUND, "Refresh Token is missing");
+  }
+
+  const result = await AuthService.refreshToken(req.cookies.refreshToken);
+
+  const { accessToken, refreshToken: newRefreshToken } = result;
+
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: config.node_env === "development" ? false : true,
+    sameSite: config.node_env === "development" ? "lax" : "none",
+    maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
+  });
+
+  res.cookie("refreshToken", newRefreshToken, {
+    httpOnly: true,
+    secure: config.node_env === "development" ? false : true,
+    sameSite: config.node_env === "development" ? "lax" : "none",
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+  });
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "New tokens generated successfully",
+    data: {
+      accessToken,
+      refreshToken: newRefreshToken,
+    },
+  });
+});
+
 export const AuthController = {
   loginUser,
   getMe,
+  refreshToken,
 };
