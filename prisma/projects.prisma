@@ -5,6 +5,8 @@ model Project {
     liveLink String
     description String
 
+    status ProjectStatus @default(PENDING)
+
     studentId String
     student Student @relation(fields:[studentId], references:[id], onDelete:Cascade)
 

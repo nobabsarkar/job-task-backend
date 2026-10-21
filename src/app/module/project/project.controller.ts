@@ -41,8 +41,26 @@ const adminGetAllProject = catchAsync(async (req, res) => {
   });
 });
 
+const adminUpdateProjectsStatus = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const result = await ProjectService.adminUpdateProjectsStatus(
+    id as string,
+    status,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Project status update successfully",
+    data: result,
+  });
+});
+
 export const ProjectController = {
   createProject,
   studentSeeOwnProject,
   adminGetAllProject,
+  adminUpdateProjectsStatus,
 };

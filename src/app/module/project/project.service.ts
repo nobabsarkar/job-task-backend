@@ -1,6 +1,10 @@
+import type { ProjectStatus } from "../../../../generated/prisma/enums";
+import type { ProjectWhereInput } from "../../../../generated/prisma/models";
 import type { IQuery } from "../../interface";
 import { prisma } from "../../lib/prisma";
+import { AppError } from "../../utils/AppError";
 import type { ICreateProject } from "./project.interface";
+import httpStatus from "http-status";
 
 const createProjectIntoDB = async (
   payload: ICreateProject,
@@ -65,8 +69,22 @@ const adminGetAllProject = async (query: IQuery) => {
   const page = query.page ? Number(query.page) : 1;
   const skip = (page - 1) * limit;
 
+  const andConditions: ProjectWhereInput[] = [];
+
+  // Filter by status
+  if (query.status) {
+    andConditions.push({
+      status: query.status.toUpperCase() as ProjectStatus,
+    });
+  }
+
+  const whereConditions: ProjectWhereInput = {
+    AND: andConditions,
+  };
+
   const [projects, total] = await prisma.$transaction([
     prisma.project.findMany({
+      where: whereConditions,
       skip,
       take: limit,
       include: {
@@ -112,8 +130,32 @@ const adminGetAllProject = async (query: IQuery) => {
   // return projects;
 };
 
+const adminUpdateProjectsStatus = async (id: string, status: ProjectStatus) => {
+  const projects = await prisma.project.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!projects) {
+    throw new AppError(httpStatus.NOT_FOUND, "Projects not found");
+  }
+
+  const result = await prisma.project.update({
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
+  });
+
+  return result;
+};
+
 export const ProjectService = {
   createProjectIntoDB,
   studentSeeOwnProject,
   adminGetAllProject,
+  adminUpdateProjectsStatus,
 };

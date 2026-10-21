@@ -3,4 +3,6 @@ export interface IQuery {
   limit?: string;
   sortOrder?: string;
   sortBy?: string;
+
+  [key: string]: any;
 }

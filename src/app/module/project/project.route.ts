@@ -28,4 +28,10 @@ router.get(
   ProjectController.adminGetAllProject,
 );
 
+router.patch(
+  "/status/:id",
+  auth(Role.SUPER_ADMIN, Role.MENTOR),
+  ProjectController.adminUpdateProjectsStatus,
+);
+
 export const ProjectRoutes = router;
