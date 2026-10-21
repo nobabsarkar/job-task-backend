@@ -48,6 +48,29 @@ const studentSeeOwnProject = async (studentId: string) => {
     where: {
       studentId,
     },
+    include: {
+      student: true,
+    },
+    omit: {
+      studentId: true,
+    },
+  });
+
+  return projects;
+};
+
+const adminGetAllProject = async () => {
+  const projects = await prisma.project.findMany({
+    include: {
+      student: {
+        omit: {
+          password: true,
+        },
+      },
+    },
+    omit: {
+      studentId: true,
+    },
   });
 
   return projects;
@@ -56,4 +79,5 @@ const studentSeeOwnProject = async (studentId: string) => {
 export const ProjectService = {
   createProjectIntoDB,
   studentSeeOwnProject,
+  adminGetAllProject,
 };

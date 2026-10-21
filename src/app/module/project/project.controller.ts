@@ -30,7 +30,19 @@ const studentSeeOwnProject = catchAsync(async (req, res) => {
   });
 });
 
+const adminGetAllProject = catchAsync(async (req, res) => {
+  const result = await ProjectService.adminGetAllProject();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: "Admin project retrieved successfully",
+    data: result,
+  });
+});
+
 export const ProjectController = {
   createProject,
   studentSeeOwnProject,
+  adminGetAllProject,
 };
