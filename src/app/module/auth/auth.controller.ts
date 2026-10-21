@@ -9,7 +9,7 @@ const loginUser = catchAsync(async (req, res) => {
   const payload = req.body;
   const result = await AuthService.loginUser(payload);
 
-  const { accessToken, refreshToken } = result;
+  const { accessToken, refreshToken, user } = result;
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
@@ -32,6 +32,7 @@ const loginUser = catchAsync(async (req, res) => {
     data: {
       accessToken,
       refreshToken,
+      user,
     },
   });
 });
