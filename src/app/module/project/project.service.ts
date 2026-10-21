@@ -1,3 +1,4 @@
+import type { IQuery } from "../../interface";
 import { prisma } from "../../lib/prisma";
 import type { ICreateProject } from "./project.interface";
 
@@ -59,21 +60,56 @@ const studentSeeOwnProject = async (studentId: string) => {
   return projects;
 };
 
-const adminGetAllProject = async () => {
-  const projects = await prisma.project.findMany({
-    include: {
-      student: {
-        omit: {
-          password: true,
+const adminGetAllProject = async (query: IQuery) => {
+  const limit = query.limit ? Number(query.limit) : 5;
+  const page = query.page ? Number(query.page) : 1;
+  const skip = (page - 1) * limit;
+
+  const [projects, total] = await prisma.$transaction([
+    prisma.project.findMany({
+      skip,
+      take: limit,
+      include: {
+        student: {
+          omit: {
+            password: true,
+          },
         },
       },
-    },
-    omit: {
-      studentId: true,
-    },
-  });
+      omit: {
+        studentId: true,
+      },
+    }),
 
-  return projects;
+    prisma.project.count(),
+  ]);
+
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages,
+    },
+    data: projects,
+  };
+
+  // const projects = await prisma.project.findMany({
+  //   include: {
+  //     student: {
+  //       omit: {
+  //         password: true,
+  //       },
+  //     },
+  //   },
+  //   omit: {
+  //     studentId: true,
+  //   },
+  // });
+
+  // return projects;
 };
 
 export const ProjectService = {

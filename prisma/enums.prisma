@@ -4,7 +4,8 @@ enum Role {
   STUDENT
 }
 
-enum UserStatus {
-  ACTIVE
-  BLOCKED
+enum ProjectStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

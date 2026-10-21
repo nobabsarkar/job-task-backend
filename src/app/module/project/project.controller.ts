@@ -26,12 +26,12 @@ const studentSeeOwnProject = catchAsync(async (req, res) => {
     success: true,
     statusCode: 200,
     message: "Student retrieved own project successfully",
-    data: result,
+    data: null,
   });
 });
 
 const adminGetAllProject = catchAsync(async (req, res) => {
-  const result = await ProjectService.adminGetAllProject();
+  const result = await ProjectService.adminGetAllProject(req?.query);
 
   sendResponse(res, {
     success: true,
