@@ -1,0 +1,9 @@
+model Project {
+    id String @id @default(uuid())
+    projectName String 
+    repoLink String 
+    liveLink String
+    description String
+
+    @@map("projects")
+}

@@ -20,10 +20,6 @@ const loginUser = async (payload: ILoginPayload) => {
     throw new AppError(httpStatus.NOT_FOUND, "User Not Found");
   }
 
-  if (user?.status === "BLOCKED") {
-    throw new AppError(httpStatus.FORBIDDEN, "User Not Found");
-  }
-
   const isPasswordMatched = await bcrypt.compare(password, user?.password);
 
   if (!isPasswordMatched) {

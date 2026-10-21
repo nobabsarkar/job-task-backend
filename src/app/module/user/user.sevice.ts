@@ -75,6 +75,9 @@ const adminUpdateUserRole = async (id: string, role: Role) => {
     data: {
       role,
     },
+    omit: {
+      password: true,
+    },
   });
 
   return updateUserRole;
