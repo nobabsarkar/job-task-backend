@@ -54,7 +54,7 @@ export const auth = (...requiredRoles: Role[]) => {
       );
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.student.findUnique({
       where: {
         id: id,
       },
@@ -65,10 +65,6 @@ export const auth = (...requiredRoles: Role[]) => {
         httpStatus.NOT_FOUND,
         "User not found. Please log in again.",
       );
-    }
-
-    if (user.status === "BLOCKED") {
-      throw new Error("Your account has been blocked. Please contact support.");
     }
 
     req.user = {

@@ -9,7 +9,7 @@ import type { Role } from "../../../../generated/prisma/enums";
 const registerUserIntoDB = async (payload: RegisterUser) => {
   const { name, email, password, role } = payload;
 
-  const isUserExit = await prisma.user.findUnique({
+  const isUserExit = await prisma.student.findUnique({
     where: { email },
   });
 
@@ -25,7 +25,7 @@ const registerUserIntoDB = async (payload: RegisterUser) => {
     Number(config.bcrypt_salt_rounds),
   );
 
-  const createUser = await prisma.user.create({
+  const createUser = await prisma.student.create({
     data: {
       name,
       email,
@@ -34,7 +34,7 @@ const registerUserIntoDB = async (payload: RegisterUser) => {
     },
   });
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.student.findUnique({
     where: {
       id: createUser.id,
       email: createUser.email || email,
@@ -48,7 +48,7 @@ const registerUserIntoDB = async (payload: RegisterUser) => {
 };
 
 const adminGetAllUserFromDB = async () => {
-  const result = await prisma.user.findMany({
+  const result = await prisma.student.findMany({
     omit: {
       password: true,
     },
@@ -58,7 +58,7 @@ const adminGetAllUserFromDB = async () => {
 };
 
 const adminUpdateUserRole = async (id: string, role: Role) => {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.student.findUnique({
     where: {
       id: id,
     },
@@ -68,7 +68,7 @@ const adminUpdateUserRole = async (id: string, role: Role) => {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  const updateUserRole = await prisma.user.update({
+  const updateUserRole = await prisma.student.update({
     where: {
       id: id,
     },

@@ -12,7 +12,7 @@ const loginUser = async (payload: ILoginPayload) => {
 
   const email = payload?.email?.trim()?.toLowerCase();
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.student.findUnique({
     where: { email },
   });
 
@@ -56,10 +56,10 @@ const loginUser = async (payload: ILoginPayload) => {
   };
 };
 
-const getMe = async (user: IRequestUser) => {
-  const isUserExists = await prisma.user.findUnique({
+const getMe = async (student: IRequestUser) => {
+  const isUserExists = await prisma.student.findUnique({
     where: {
-      id: user?.id,
+      id: student?.id,
     },
     omit: {
       password: true,
@@ -90,7 +90,7 @@ const refreshToken = async (token: string) => {
 
   const data = verifiedRefreshToken?.data as JwtPayload;
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.student.findUnique({
     where: { id: data?.id },
   });
 

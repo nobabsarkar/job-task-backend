@@ -1,6 +1,6 @@
 export interface ICreateProject {
   projectName: string;
-  repoLink: string;
+  repoUrl: string;
   liveLink: string;
   description: string;
 }

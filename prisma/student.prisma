@@ -1,4 +1,4 @@
-model User {
+model Student {
   id       String @id @default(uuid())
   name     String
   email    String @unique
@@ -9,5 +9,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("users")
+
+
+  @@map("students")
 }

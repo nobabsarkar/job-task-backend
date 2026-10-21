@@ -21,7 +21,7 @@ export const seedSuperAdmin = async () => {
     }
 
     // Check whether a Super Admin already exists
-    const isSuperAdminExist = await prisma.user.findFirst({
+    const isSuperAdminExist = await prisma.student.findFirst({
       where: {
         role: Role.SUPER_ADMIN,
       },
@@ -39,7 +39,7 @@ export const seedSuperAdmin = async () => {
     );
 
     // Create Super Admin
-    const superAdmin = await prisma.user.create({
+    const superAdmin = await prisma.student.create({
       data: {
         name,
         email,
