@@ -13,7 +13,11 @@ router.post(
   UserController.registerUser,
 );
 
-router.get("/all", UserController.adminGetAllUser);
+router.get(
+  "/all",
+  auth(Role.SUPER_ADMIN, Role.MENTOR),
+  UserController.adminGetAllUser,
+);
 
 router.patch(
   "/update-role/:id",

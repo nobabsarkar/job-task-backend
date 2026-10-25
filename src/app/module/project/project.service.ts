@@ -10,12 +10,10 @@ const createProjectIntoDB = async (
   payload: ICreateProject,
   studentId: string,
 ) => {
-  const existingProject = await prisma.project.findUnique({
+  const existingProject = await prisma.project.findFirst({
     where: {
-      studentId_repoUrl: {
-        studentId,
-        repoUrl: payload.repoUrl,
-      },
+      studentId,
+      OR: [{ repoUrl: payload.repoUrl }, { liveLink: payload.liveLink }],
     },
   });
 

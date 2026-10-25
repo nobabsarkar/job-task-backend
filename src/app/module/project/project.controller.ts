@@ -26,8 +26,10 @@ const studentSeeOwnProject = catchAsync(async (req, res) => {
     success: true,
     statusCode: 200,
     message: "Student retrieved own project successfully",
-    data: null,
+    data: result,
   });
+
+  return result;
 });
 
 const adminGetAllProject = catchAsync(async (req, res) => {
