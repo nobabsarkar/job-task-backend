@@ -60,9 +60,21 @@ const adminUpdateProjectsStatus = catchAsync(async (req, res) => {
   });
 });
 
+const adminGetAllStatisticsData = catchAsync(async (req, res) => {
+  const result = await ProjectService.adminGetAllStatistics();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Admin Retrived Project successfully",
+    data: result,
+  });
+});
+
 export const ProjectController = {
   createProject,
   studentSeeOwnProject,
   adminGetAllProject,
   adminUpdateProjectsStatus,
+  adminGetAllStatisticsData,
 };

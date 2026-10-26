@@ -6,7 +6,7 @@ export const createProjectRateLimiter = rateLimit({
   message: {
     success: false,
     message:
-      "you can create only 5 projects per minute. Please try again later",
+      "you can create only 6 projects per minute. Please try again later",
   },
   standardHeaders: "draft-8",
   legacyHeaders: false,

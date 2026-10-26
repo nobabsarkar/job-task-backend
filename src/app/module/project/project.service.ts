@@ -111,21 +111,6 @@ const adminGetAllProject = async (query: IQuery) => {
     },
     data: projects,
   };
-
-  // const projects = await prisma.project.findMany({
-  //   include: {
-  //     student: {
-  //       omit: {
-  //         password: true,
-  //       },
-  //     },
-  //   },
-  //   omit: {
-  //     studentId: true,
-  //   },
-  // });
-
-  // return projects;
 };
 
 const adminUpdateProjectsStatus = async (id: string, status: ProjectStatus) => {
@@ -151,9 +136,16 @@ const adminUpdateProjectsStatus = async (id: string, status: ProjectStatus) => {
   return result;
 };
 
+const adminGetAllStatistics = async () => {
+  const result = await prisma.project.findMany();
+
+  return result;
+};
+
 export const ProjectService = {
   createProjectIntoDB,
   studentSeeOwnProject,
   adminGetAllProject,
   adminUpdateProjectsStatus,
+  adminGetAllStatistics,
 };

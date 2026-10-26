@@ -34,4 +34,10 @@ router.patch(
   ProjectController.adminUpdateProjectsStatus,
 );
 
+router.get(
+  "/statistics",
+  auth(Role.SUPER_ADMIN, Role.MENTOR),
+  ProjectController.adminGetAllStatisticsData,
+);
+
 export const ProjectRoutes = router;
