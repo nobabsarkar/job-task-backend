@@ -10,15 +10,22 @@ const createProjectIntoDB = async (
   payload: ICreateProject,
   studentId: string,
 ) => {
-  const existingProject = await prisma.project.findFirst({
+  const exitProject = await prisma.project.findFirst({
     where: {
       studentId,
-      OR: [{ repoUrl: payload.repoUrl }, { liveLink: payload.liveLink }],
+      OR: [
+        {
+          repoUrl: payload.repoUrl,
+        },
+        {
+          liveLink: payload.liveLink,
+        },
+      ],
     },
   });
 
-  if (existingProject) {
-    throw new Error("You have already submitted this project.");
+  if (exitProject) {
+    throw new Error("Already submit this project");
   }
 
   const project = await prisma.project.create({

@@ -1,12 +1,11 @@
 import rateLimit from "express-rate-limit";
 
-export const createProjectRateLimiter = rateLimit({
+export const rateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  limit: 5,
+  limit: 3,
   message: {
     success: false,
-    message:
-      "you can create only 6 projects per minute. Please try again later",
+    message: "per minute you can create 3 project",
   },
   standardHeaders: "draft-8",
   legacyHeaders: false,

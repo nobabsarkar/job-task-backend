@@ -2,17 +2,13 @@ import { Router } from "express";
 import { ProjectController } from "./project.controller";
 import { auth } from "../../middleware/checkAuth";
 import { Role } from "../../../../generated/prisma/enums";
-import { validateRequest } from "../../middleware/validateRequest";
-import { projectValidation } from "./project.validation";
-import { createProjectRateLimiter } from "../../middleware/rateLimiter";
-
+import { rateLimiter } from "../../middleware/limiter";
 const router = Router();
 
 router.post(
   "/create-project",
+  rateLimiter,
   auth(Role.STUDENT),
-  createProjectRateLimiter,
-  validateRequest(projectValidation.CreateProjectValidationSchema),
   ProjectController.createProject,
 );
 
